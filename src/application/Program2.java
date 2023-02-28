@@ -14,6 +14,11 @@ public class Program2 {
 		Department department = new Department(null, "Music");
 		departmentDao.insert(department);
 		System.out.println("Inserted! New Id: " + department.getId());
+		
+		System.out.println("Test #2: Department update ");
+		Department dep = new Department(6, "Dance");
+		departmentDao.update(dep);
+		System.out.println("Updated!");
 
 
 	}
