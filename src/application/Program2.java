@@ -19,6 +19,10 @@ public class Program2 {
 		Department dep = new Department(6, "Dance");
 		departmentDao.update(dep);
 		System.out.println("Updated!");
+		
+		System.out.println("Test #3: Department findById");
+		Department dep2 = departmentDao.findById(1);
+		System.out.println(dep2);
 
 
 	}
