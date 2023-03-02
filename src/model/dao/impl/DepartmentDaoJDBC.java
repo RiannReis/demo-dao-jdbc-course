@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import db.DB;
@@ -70,9 +71,21 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 	}
 
 	@Override
-	public void delete(Department obj) {
-		// TODO Auto-generated method stub
-
+	public void deleteById(Integer id) {
+		PreparedStatement pst = null;
+		try {
+			pst = conn.prepareStatement("DELETE FROM department WHERE id = ?");
+			
+			pst.setInt(1, id);
+			
+			pst.executeUpdate();
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.CloseStatement(pst);
+		}
 	}
 
 	@Override
@@ -104,8 +117,30 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
 	@Override
 	public List<Department> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			pst = conn.prepareStatement(
+				"SELECT * FROM department ORDER BY Name");
+			rs = pst.executeQuery();
+
+			List<Department> list = new ArrayList<>();
+
+			while (rs.next()) {
+				Department obj = new Department();
+				obj.setId(rs.getInt("Id"));
+				obj.setName(rs.getString("Name"));
+				list.add(obj);
+			}
+			return list;
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.CloseStatement(pst);
+			DB.CloseResultSet(rs);
+		}
 	}
 
 }
